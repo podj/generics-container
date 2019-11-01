@@ -1,6 +1,7 @@
 package com.podj.itamar;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 
 import java.util.List;
 
@@ -72,5 +73,40 @@ class ContextTest {
 		
 		// assert
 		assertNull(numbers);
+	}
+	
+	@Test
+	void getList_notPuttingAListButJustString_doesNotThrowClassCastException() {
+		// arrange
+		String firstName = "John Doe";
+		context.put("firstName", firstName, String.class);
+		
+		// act & assert
+		assertDoesNotThrow(() -> context.getList("firstName", String.class));
+	}
+	
+	@Test
+	void getList_notPuttingAListButJustString_returnNull() {
+		// arrange
+		String firstName = "John Doe";
+		context.put("firstName", firstName, String.class);
+		
+		// act
+		List<String> names = context.getList("firstName", String.class);
+		
+		// assert
+		assertNull(names);
+	}
+	
+	@Test
+	void getList_storingSubtypeUsingSupertypeAsKey_doesNotThrowClassCastException() {
+		// arrange
+		List<Long> longs = List.of(0L, 5L, 16L);
+		context.put("nums", longs, Number.class);
+		
+		// act & assert
+		assertDoesNotThrow(() -> {
+			List<Number> numbers = context.getList("nums", Number.class);
+		});
 	}
 }

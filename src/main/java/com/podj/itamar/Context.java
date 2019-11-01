@@ -10,6 +10,7 @@ import java.util.Map;
 
 public final class Context {
 	
+	private final static String LIST_KEY_PREFIX = "LIST::";
 	private final Map<Key<?>, Object> values = new HashMap<>();
 	
 	/**
@@ -32,7 +33,7 @@ public final class Context {
 	 * @param <T> The type of the objects inside {@code list}
 	 */
 	public <T> void put(@NonNull String identifier, List<? extends T> list, @NonNull Class<T> type) {
-		insert(identifier, list, type);
+		insert(LIST_KEY_PREFIX + identifier, list, type);
 	}
 	
 	/**
@@ -60,7 +61,7 @@ public final class Context {
 	 * @return A list that matches the identifier and the list's objects' type.
 	 */
 	public <T> List<T> getList(@NonNull String identifier, @NonNull Class<T> type) {
-		Key<T> key = new Key<>(identifier, type);
+		Key<T> key = new Key<>(LIST_KEY_PREFIX + identifier, type);
 		
 		@SuppressWarnings("unchecked")
 		List<T> list = (List<T>) values.get(key);
